@@ -56,15 +56,40 @@ function orderStatus(country, passNO, mVal, gVal) {
   let maskCost =  country === 'UK' ? (mask_uk_price * nonImportMask) + (mask_ger_price * importMask) : (mask_ger_price * nonImportMask) + (mask_uk_price * importMask)
 
   cost = glovesCost + maskCost
-  if( importGloves >= 10 || importMask >= 10) {
-    let chargesOnMask = Math.ceil(importMask/10) * 400
-    let chargesOnGloves = Math.ceil(importGloves/10) * 400
+  if( importGloves >= 1 || importMask >= 1) {
+      const qtyMask = Math.ceil(importMask/10);
+      const qtyGloves = Math.ceil(importGloves/10);
+      console.log('>>>>', qtyGloves, qtyMask);
+    let chargesOnMask = qtyMask * 400;
+    let chargesOnGloves = qtyGloves * 400;
      cost = cost + chargesOnGloves + chargesOnMask
-     country === 'UK' ? (passNO[0] === 'B'? cost = cost -(cost*0.2) : cost) : (passNO[0] === 'A'? cost = cost -(cost*0.2) : cost)
+     if((country === 'UK' && passNO[0] === 'B') || (country !== 'UK' && passNO[0] === 'A')){
+       const gDisc = chargesOnGloves*0.2;
+       const mDisc = chargesOnMask*0.2;
+     }
+      cost = cost - gDisc - mDisc;
   }
-  return `${cost}:${mask_uk}:${mask_ger}:${gloves_uk}:${gloves_ger}`
+  return `cost ${cost}:mask_uk${mask_uk}:mask_ger${mask_ger}:gloves_uk${gloves_uk}:gloves_ger${gloves_ger}`
    }
   }
 
 //  UK:B123AB1234567:Gloves:20:Mask:10
-console.log(orderStatus('UK','B123AB1234567',10, 20));
+// Germany:B123AB1234567:Gloves:22:Mask:10
+console.log(orderStatus('Germany','B123AB1234567',10, 22));
+
+
+// function calculateProfit(arr) {
+//   let minvalue = Math.min(...arr)
+//   let startIndex = arr.indexOf(minvalue)
+//   let max =  arr[startIndex+1]
+//   let output;
+
+// for(let i = startIndex+1; i<= arr.length; i++){
+//     if (arr[i] > max)
+//         max = arr[i]
+//   }
+// output = max-minvalue != max-minvalue ? 0 : max-minvalue;
+// return output;
+// }
+
+// console.log(calculateProfit([7,1,5,3,6,4,8]));
